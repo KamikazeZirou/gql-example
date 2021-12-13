@@ -6,6 +6,7 @@ package graph
 import (
 	"context"
 	"fmt"
+	"github.com/graph-gophers/dataloader"
 	"math/rand"
 
 	"github.com/kamikazezirou/gql-example/graph/generated"
@@ -27,7 +28,13 @@ func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 }
 
 func (r *todoResolver) User(ctx context.Context, obj *model.Todo) (*model.User, error) {
-	return &model.User{ID: obj.UserID, Name: "user " + obj.UserID}, nil
+	thunk := ctxLoaders(ctx).UserById.Load(ctx, dataloader.StringKey(obj.UserID))
+	item, err := thunk()
+	if err != nil {
+		return nil, err
+	} else {
+		return item.(*model.User), nil
+	}
 }
 
 // Mutation returns generated.MutationResolver implementation.
