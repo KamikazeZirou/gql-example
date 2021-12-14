@@ -6,9 +6,9 @@ package graph
 import (
 	"context"
 	"fmt"
-	"github.com/graph-gophers/dataloader"
 	"math/rand"
 
+	"github.com/graph-gophers/dataloader"
 	"github.com/kamikazezirou/gql-example/graph/generated"
 	"github.com/kamikazezirou/gql-example/graph/model"
 )
@@ -25,6 +25,15 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 	return r.todos, nil
+}
+
+func (r *queryResolver) Viewer(ctx context.Context) (*model.User, error) {
+	// サンプル実装なので固定値を返しているだけですが、
+	// プロダクトコードでは、ユーザを認証して、そのユーザの情報を返すようにしてください。
+	return &model.User{
+		ID:   "user:1",
+		Name: "user1",
+	}, nil
 }
 
 func (r *todoResolver) User(ctx context.Context, obj *model.Todo) (*model.User, error) {
