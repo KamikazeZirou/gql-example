@@ -2,6 +2,10 @@
 
 package model
 
+type Node interface {
+	IsNode()
+}
+
 type NewTodo struct {
 	Text   string `json:"text"`
 	UserID string `json:"userId"`

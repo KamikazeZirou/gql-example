@@ -5,8 +5,10 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math/rand"
+	"strings"
 
 	"github.com/graph-gophers/dataloader"
 	"github.com/kamikazezirou/gql-example/graph/generated"
@@ -16,7 +18,7 @@ import (
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
 	todo := &model.Todo{
 		Text:   input.Text,
-		ID:     fmt.Sprintf("T%d", rand.Int()),
+		ID:     fmt.Sprintf("todo:%d", rand.Int()),
 		UserID: input.UserID, // fix this line
 	}
 	r.todos = append(r.todos, todo)
@@ -34,6 +36,23 @@ func (r *queryResolver) Viewer(ctx context.Context) (*model.User, error) {
 		ID:   "user:1",
 		Name: "user1",
 	}, nil
+}
+
+func (r *queryResolver) Node(ctx context.Context, id string) (model.Node, error) {
+	s := strings.Split(id, ":")
+	t := s[0]
+
+	switch t {
+	case "todo":
+		for _, todo := range r.todos {
+			if todo.ID == id {
+				return todo, nil
+			}
+		}
+		return nil, errors.New("not found")
+	default:
+		return nil, fmt.Errorf("unknwon type:%s", t)
+	}
 }
 
 func (r *todoResolver) User(ctx context.Context, obj *model.Todo) (*model.User, error) {
