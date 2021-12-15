@@ -18,8 +18,30 @@ type User {
     name: String!
 }
 
+type TodoEdge {
+    cursor: String!
+    node: Todo!
+}
+
+type PageInfo {
+    endCursor: String
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+    startCursor: String
+}
+
+type TodoConnection {
+    edges: [TodoEdge!]!
+    pageInfo: PageInfo!
+}
+
 type Query {
-    todos: [Todo!]!
+    todos(
+        after: String
+        before: String
+        first: Int
+        last: Int
+    ) : TodoConnection!
     viewer: User!
     node(id: ID!): Node
 }
