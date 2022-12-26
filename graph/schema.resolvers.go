@@ -11,7 +11,6 @@ import (
 	"math/rand"
 	"strings"
 
-	"github.com/graph-gophers/dataloader"
 	"github.com/kamikazezirou/gql-example/graph/generated"
 	"github.com/kamikazezirou/gql-example/graph/model"
 )
@@ -61,12 +60,12 @@ func (r *queryResolver) Node(ctx context.Context, id string) (model.Node, error)
 
 // User is the resolver for the user field.
 func (r *todoResolver) User(ctx context.Context, obj *model.Todo) (*model.User, error) {
-	thunk := ctxLoaders(ctx).UserById.Load(ctx, dataloader.StringKey(obj.UserID))
+	thunk := ctxLoaders(ctx).UserById.Load(ctx, obj.UserID)
 	item, err := thunk()
 	if err != nil {
 		return nil, err
 	} else {
-		return item.(*model.User), nil
+		return item, nil
 	}
 }
 
