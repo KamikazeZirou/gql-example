@@ -34,7 +34,6 @@ func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 
 // Viewer is the resolver for the viewer field.
 func (r *queryResolver) Viewer(ctx context.Context) (*model.User, error) {
-	// サンプル実装なので固定値を返しているだけですが、
 	// プロダクトコードでは、ユーザを認証して、そのユーザの情報を返すようにしてください。
 	return &model.User{
 		ID:   "user:1",
