@@ -4,6 +4,7 @@ package model
 
 type Node interface {
 	IsNode()
+	GetID() string
 }
 
 type NewTodo struct {
